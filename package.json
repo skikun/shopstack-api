@@ -9,7 +9,8 @@
     "build": "tsc",
     "start": "node dist/server.js",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "seed": "tsx prisma/seed.ts"
   },
   "keywords": [],
   "author": "",
