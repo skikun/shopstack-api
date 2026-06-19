@@ -1,0 +1,53 @@
+import { prisma } from "../src/lib/prisma.js";
+
+async function main() {
+  // Categories — upsert by unique slug so re-running the seed is safe
+  const apparel = await prisma.category.upsert({
+    where: { slug: "apparel" },
+    update: {},
+    create: { name: "Apparel", slug: "apparel" },
+  });
+
+  const electronics = await prisma.category.upsert({
+    where: { slug: "electronics" },
+    update: {},
+    create: { name: "Electronics", slug: "electronics" },
+  });
+
+  // Products — note priceCents is integer cents, and categories link via connect
+  await prisma.product.upsert({
+    where: { slug: "classic-tee" },
+    update: {},
+    create: {
+      name: "Classic Tee",
+      slug: "classic-tee",
+      description: "A comfortable 100% cotton t-shirt.",
+      priceCents: 1999, // $19.99
+      stock: 100,
+      categories: { connect: [{ id: apparel.id }] },
+    },
+  });
+
+  await prisma.product.upsert({
+    where: { slug: "wireless-earbuds" },
+    update: {},
+    create: {
+      name: "Wireless Earbuds",
+      slug: "wireless-earbuds",
+      description: "Noise-cancelling Bluetooth earbuds.",
+      priceCents: 8999, // $89.99
+      stock: 50,
+      categories: { connect: [{ id: electronics.id }] },
+    },
+  });
+
+  console.log("Seed complete.");
+}
+
+main()
+  .then(() => prisma.$disconnect())
+  .catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });
