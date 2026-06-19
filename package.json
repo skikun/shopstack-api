@@ -1,0 +1,15 @@
+{
+  "name": "shopstack-api",
+  "version": "0.1.0",
+  "description": "Decoupled REST API for the ShopStack e-commerce project",
+  "type": "module",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT"
+}
