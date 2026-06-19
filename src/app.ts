@@ -1,5 +1,5 @@
 import express from "express";
-import pinoHttp from "pino-http";
+import { pinoHttp } from "pino-http";
 import { productsRouter } from "./modules/products/products.routes.js";
 import { logger } from "./lib/logger.js";
 
