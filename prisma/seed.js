@@ -14,6 +14,18 @@ async function main() {
     create: { name: "Electronics", slug: "electronics" },
   });
 
+  const accessories = await prisma.category.upsert({
+    where: { slug: "accessories" },
+    update: {},
+    create: { name: "Accessories", slug: "accessories" },
+  });
+
+  const decorations = await prisma.category.upsert({
+    where: { slug: "decorations" },
+    update: {},
+    create: { name: "Decorations", slug: "decorations" },
+  });
+
   // Products — note priceCents is integer cents, and categories link via connect
   await prisma.product.upsert({
     where: { slug: "classic-tee" },
@@ -38,6 +50,32 @@ async function main() {
       priceCents: 8999, // $89.99
       stock: 50,
       categories: { connect: [{ id: electronics.id }] },
+    },
+  });
+
+  await prisma.product.upsert({
+    where: { slug: "golden-neck-collar" },
+    update: {},
+    create: {
+      name: "Golden Neck Collar",
+      slug: "golden-neck-collar",
+      description: "Gold-colored neck collar (made out of iron, not real gold).",
+      priceCents: 1550, // $15.50
+      stock: 10,
+      categories: { connect: [{ id: accessories.id }] },
+    },
+  });
+
+  await prisma.product.upsert({
+    where: { slug: "wooden-horse-desktop-decoration" },
+    update: {},
+    create: {
+      name: "Wooden horse desktop decoration",
+      slug: "wooden-horse-desktop-decoration",
+      description: "Small wooden horse to decorate desktop/working areas.",
+      priceCents: 1290, // $12.90
+      stock: 35,
+      categories: { connect: [{ id: decorations.id }] },
     },
   });
 
