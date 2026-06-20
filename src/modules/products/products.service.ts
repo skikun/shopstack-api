@@ -1,6 +1,6 @@
 import { prisma } from "../../lib/prisma.js";
 import type { Prisma } from "../../generated/prisma/client.js";
-import type { ProductQuery } from "./products.schema.js";
+import type { ProductQuery, CreateProductInput } from "./products.schema.js";
 
 export async function listProducts(query: ProductQuery) {
   const { page, limit, search, category, sort, order } = query;
@@ -26,6 +26,19 @@ export async function listProducts(query: ProductQuery) {
 export function getProductBySlug(slug: string) {
   return prisma.product.findUnique({
     where: { slug },
+    include: { categories: true },
+  });
+}
+
+export function createProduct(input: CreateProductInput) {
+  const { categorySlugs, ...data } = input;
+  return prisma.product.create({
+    data: {
+      ...data,
+      categories: categorySlugs?.length
+        ? { connect: categorySlugs.map((slug) => ({ slug })) }
+        : undefined,
+    },
     include: { categories: true },
   });
 }

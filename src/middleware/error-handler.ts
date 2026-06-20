@@ -2,6 +2,7 @@ import type { Request, Response, NextFunction } from "express";
 import { ZodError } from "zod";
 import { HttpError } from "../lib/http-error.js";
 import { logger } from "../lib/logger.js";
+import { Prisma } from "../generated/prisma/client.js";
 
 // Runs when no route matched the request → a clean 404.
 export function notFoundHandler(_req: Request, res: Response) {
@@ -21,6 +22,10 @@ export function errorHandler(err: unknown, _req: Request, res: Response, _next: 
   // 2. Errors we threw on purpose → use their status code
   if (err instanceof HttpError) {
     return res.status(err.statusCode).json({ error: { message: err.message } });
+  }
+
+  if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002") {
+    return res.status(409).json({ error: { message: "A record with that value already exists" } });
   }
 
   // 3. Anything else is unexpected: log the real error, but never leak it to the client

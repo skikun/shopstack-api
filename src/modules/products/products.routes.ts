@@ -5,3 +5,4 @@ export const productsRouter = Router();
 
 productsRouter.get("/", productsController.listProducts);
 productsRouter.get("/:slug", productsController.getProductBySlug);
+productsRouter.post("/", productsController.createProduct);

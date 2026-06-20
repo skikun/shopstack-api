@@ -1,7 +1,7 @@
 import { notFound } from "../../lib/http-error.js";
 import type { Request, Response } from "express";
 import * as productsService from "./products.service.js";
-import { productQuerySchema } from "./products.schema.js";
+import { productQuerySchema, createProductSchema } from "./products.schema.js";
 
 export async function listProducts(req: Request, res: Response) {
   const query = productQuerySchema.parse(req.query);
@@ -26,4 +26,10 @@ export async function getProductBySlug(req: Request<{ slug: string }>, res: Resp
   }
 
   res.json({ data: product });
+}
+
+export async function createProduct(req: Request, res: Response) {
+  const input = createProductSchema.parse(req.body);
+  const product = await productsService.createProduct(input);
+  res.status(201).json({ data: product });
 }

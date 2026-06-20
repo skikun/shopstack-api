@@ -10,3 +10,20 @@ export const productQuerySchema = z.object({
 });
 
 export type ProductQuery = z.infer<typeof productQuerySchema>;
+
+export const createProductSchema = z.object({
+  name: z.string().trim().min(1),
+  slug: z
+    .string()
+    .trim()
+    .min(1)
+    .regex(/^[a-z0-9]+(?:-[a-z0-9]+)*$/, "Slug must be lowercase words separated by hyphens"),
+  description: z.string().trim().min(1),
+  priceCents: z.number().int().nonnegative(),
+  currency: z.string().trim().length(3).default("usd"),
+  stock: z.number().int().nonnegative().default(0),
+  imageUrl: z.string().url().optional(),
+  categorySlugs: z.array(z.string().trim().min(1)).optional(),
+});
+
+export type CreateProductInput = z.infer<typeof createProductSchema>;
