@@ -24,8 +24,15 @@ export function errorHandler(err: unknown, _req: Request, res: Response, _next: 
     return res.status(err.statusCode).json({ error: { message: err.message } });
   }
 
-  if (err instanceof Prisma.PrismaClientKnownRequestError && err.code === "P2002") {
-    return res.status(409).json({ error: { message: "A record with that value already exists" } });
+  if (err instanceof Prisma.PrismaClientKnownRequestError) {
+    if (err.code === "P2002") {
+      return res
+        .status(409)
+        .json({ error: { message: "A record with that value already exists" } });
+    }
+    if (err.code === "P2025") {
+      return res.status(404).json({ error: { message: "Resource not found" } });
+    }
   }
 
   // 3. Anything else is unexpected: log the real error, but never leak it to the client
