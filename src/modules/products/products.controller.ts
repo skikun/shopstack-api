@@ -1,3 +1,4 @@
+import { notFound } from "../../lib/http-error.js";
 import type { Request, Response } from "express";
 import * as productsService from "./products.service.js";
 import { productQuerySchema } from "./products.schema.js";
@@ -15,4 +16,14 @@ export async function listProducts(req: Request, res: Response) {
       totalPages: Math.ceil(total / query.limit),
     },
   });
+}
+
+export async function getProductBySlug(req: Request<{ slug: string }>, res: Response) {
+  const product = await productsService.getProductBySlug(req.params.slug);
+
+  if (!product) {
+    throw notFound("Product not found");
+  }
+
+  res.json({ data: product });
 }

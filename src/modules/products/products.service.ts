@@ -22,3 +22,10 @@ export async function listProducts(query: ProductQuery) {
 
   return { items, total };
 }
+
+export function getProductBySlug(slug: string) {
+  return prisma.product.findUnique({
+    where: { slug },
+    include: { categories: true },
+  });
+}
