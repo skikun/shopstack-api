@@ -2,6 +2,7 @@ import express from "express";
 import { pinoHttp } from "pino-http";
 import { logger } from "./lib/logger.js";
 import { productsRouter } from "./modules/products/products.routes.js";
+import { categoriesRouter } from "./modules/categories/categories.routes.js";
 import { notFoundHandler, errorHandler } from "./middleware/error-handler.js";
 
 export const app = express();
@@ -14,6 +15,7 @@ app.get("/health", (_req, res) => {
 });
 
 app.use("/products", productsRouter);
+app.use("/categories", categoriesRouter);
 
 app.use(notFoundHandler);
 app.use(errorHandler);
