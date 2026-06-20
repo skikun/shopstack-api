@@ -12,3 +12,7 @@ app.use("/products", productsRouter);
 app.get("/health", (_req, res) => {
   res.json({ status: "ok" });
 });
+
+app.get("/hello", (_req, res) => {
+  res.json("world!");
+});
