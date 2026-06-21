@@ -7,6 +7,8 @@ import { notFoundHandler, errorHandler } from "./middleware/error-handler.js";
 import { authRouter } from "./modules/auth/auth.routes.js";
 import { openapiDocument } from "./docs/openapi.js";
 import cookieParser from "cookie-parser";
+import swaggerUi from "swagger-ui-express";
+import { apiReference } from "@scalar/express-api-reference";
 
 export const app = express();
 
@@ -25,6 +27,9 @@ app.use("/auth", authRouter);
 app.get("/openapi.json", (_req, res) => {
   res.json(openapiDocument);
 });
+
+app.use("/docs", swaggerUi.serve, swaggerUi.setup(openapiDocument));
+app.use("/reference", apiReference({ url: "/openapi.json" }));
 
 app.use(notFoundHandler);
 app.use(errorHandler);
