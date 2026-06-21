@@ -5,6 +5,7 @@ import { productsRouter } from "./modules/products/products.routes.js";
 import { categoriesRouter } from "./modules/categories/categories.routes.js";
 import { notFoundHandler, errorHandler } from "./middleware/error-handler.js";
 import { authRouter } from "./modules/auth/auth.routes.js";
+import { openapiDocument } from "./docs/openapi.js";
 import cookieParser from "cookie-parser";
 
 export const app = express();
@@ -20,6 +21,10 @@ app.get("/health", (_req, res) => {
 app.use("/categories", categoriesRouter);
 app.use("/products", productsRouter);
 app.use("/auth", authRouter);
+
+app.get("/openapi.json", (_req, res) => {
+  res.json(openapiDocument);
+});
 
 app.use(notFoundHandler);
 app.use(errorHandler);
