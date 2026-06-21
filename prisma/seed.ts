@@ -1,7 +1,6 @@
 import { prisma } from "../src/lib/prisma.js";
 
 async function main() {
-  // Categories — upsert by unique slug so re-running the seed is safe
   const apparel = await prisma.category.upsert({
     where: { slug: "apparel" },
     update: {},
@@ -26,7 +25,6 @@ async function main() {
     create: { name: "Decorations", slug: "decorations" },
   });
 
-  // Products — note priceCents is integer cents, and categories link via connect
   await prisma.product.upsert({
     where: { slug: "classic-tee" },
     update: {},
@@ -34,7 +32,7 @@ async function main() {
       name: "Classic Tee",
       slug: "classic-tee",
       description: "A comfortable 100% cotton t-shirt.",
-      priceCents: 1999, // $19.99
+      priceCents: 1999,
       stock: 100,
       categories: { connect: [{ id: apparel.id }] },
     },
@@ -47,7 +45,7 @@ async function main() {
       name: "Wireless Earbuds",
       slug: "wireless-earbuds",
       description: "Noise-cancelling Bluetooth earbuds.",
-      priceCents: 8999, // $89.99
+      priceCents: 8999,
       stock: 50,
       categories: { connect: [{ id: electronics.id }] },
     },
@@ -60,7 +58,7 @@ async function main() {
       name: "Golden Neck Collar",
       slug: "golden-neck-collar",
       description: "Gold-colored neck collar (made out of iron, not real gold).",
-      priceCents: 1550, // $15.50
+      priceCents: 1550,
       stock: 10,
       categories: { connect: [{ id: accessories.id }] },
     },
@@ -73,7 +71,7 @@ async function main() {
       name: "Wooden horse desktop decoration",
       slug: "wooden-horse-desktop-decoration",
       description: "Small wooden horse to decorate desktop/working areas.",
-      priceCents: 1290, // $12.90
+      priceCents: 1290,
       stock: 35,
       categories: { connect: [{ id: decorations.id }] },
     },

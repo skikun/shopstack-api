@@ -39,7 +39,7 @@ model Product {
   name        String
   slug        String      @unique
   description String
-  priceCents  Int // store money as integer cents — never floats
+  priceCents  Int
   currency    String      @default("usd")
   stock       Int         @default(0)
   imageUrl    String?
@@ -79,7 +79,7 @@ model OrderItem {
   product        Product @relation(fields: [productId], references: [id])
   productId      String
   quantity       Int
-  unitPriceCents Int // snapshot the price at purchase time
+  unitPriceCents Int
 }
 
 model Review {
@@ -88,7 +88,7 @@ model Review {
   productId String
   user      User     @relation(fields: [userId], references: [id])
   userId    String
-  rating    Int // 1–5
+  rating    Int
   comment   String?
   createdAt DateTime @default(now())
 }
